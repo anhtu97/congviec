@@ -1,4 +1,3 @@
-#apt update
 sudo apt-get install -y realmd sssd sssd-tools samba krb5-user packagekit adcli ntp
 echo """
 # /etc/ntp.conf, configuration for ntpd; see ntp.conf(5) for help
