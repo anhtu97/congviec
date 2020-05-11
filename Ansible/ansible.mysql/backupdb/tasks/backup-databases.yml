@@ -1,0 +1,11 @@
+---
+    - name: Backup databases
+      mysql_db:
+        state: dump
+        target: "{{ file_backup }}{{item}}-{{ lookup('pipe','date +%Y:%m:%d') }}.sql"
+        name: "{{ item }}"
+        login_host: "{{ host }}"
+        login_user: "{{ user }}"
+        login_password: "{{ passwd }}"
+        login_port: '{{ port_db | default("3306") }}'
+      with_items: "{{ include_db }}"

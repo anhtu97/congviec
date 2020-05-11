@@ -1,0 +1,5 @@
+file_backup: "{{ file_databases }}"
+host: "{{ host_db }}"
+user: "{{ user_db }}"
+passwd: "{{ passwd_db }}"
+include: "{{ include_db }}"

@@ -1,0 +1,20 @@
+---
+- name: Migration Database Mongo
+  hosts: localhost
+  roles:
+  - name: Move Database
+    role: migrationdb
+    link_folder_src: "/home/MongoDB/Database-New/"
+    host_src: 192.168.10.10
+    user_src: user
+    passwd_src: admin
+    port_db_src: 27017
+
+    link_folder_des: "/home/MongoDB/Database-Old/"
+    host_des: 192.168.10.20
+    user_des: admin
+    passwd_des: admin
+    port_db_des: 27017
+    include_database: 
+        - api
+        - vk

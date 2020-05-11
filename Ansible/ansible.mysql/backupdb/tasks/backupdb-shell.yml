@@ -1,0 +1,5 @@
+---
+- name: Backup DB Mysql
+  shell: |
+    mysqldump -h{{ host }} -u{{ user }} -p{{ passwd }} {{ item }} > {{ file_backup }}{{ item }}{{ lookup('pipe','date +%Y:%m:%d') }}.sql
+  with_items: "{{ include_db }}"

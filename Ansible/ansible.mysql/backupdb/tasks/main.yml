@@ -1,0 +1,10 @@
+---
+# Create folder backup
+- include_tasks: create-folder.yml
+# Backup databases
+#- include_tasks: backup-databases.yml
+#Backup databases Shell
+- include_tasks: backupdb-shell.yml
+# Tar file backup
+- include_tasks: tarfile.yml  
+    

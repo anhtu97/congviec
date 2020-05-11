@@ -1,0 +1,11 @@
+---
+include_db: "{{ include_database }}"
+file_backup_new: "{{ folder_src }}"
+host_new: "{{ host_src }} "
+user_new: "{{ user_src }}"
+passwd_new: "{{ passwd_src }}"
+
+file_backup_old: "{{ folder_dest }}"
+host_old: "{{ host_dest }}"
+user_old: "{{ user_dest }}"
+passwd_old: "{{ passwd_dest }}"

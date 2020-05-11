@@ -1,0 +1,13 @@
+---
+- name: Setup Monitoring Services
+  hosts: localhost
+  roles: 
+  - name: Backup database PostgreSQL
+    role: backupdb
+    file_databases: "/home/backup-PostgreSQL/"
+    host_db: 192.168.20.10
+    user_db: postgres
+    passwd_db: postgres
+    port_db: 5432
+    include_db:
+        - partner

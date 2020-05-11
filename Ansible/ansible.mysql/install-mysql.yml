@@ -1,0 +1,5 @@
+---
+- name: Install Mysql
+  hosts: localhost
+  roles: 
+        - install-mysql

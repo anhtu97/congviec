@@ -1,0 +1,5 @@
+---
+- name:
+  systemd:
+    state: started
+    name: mongod

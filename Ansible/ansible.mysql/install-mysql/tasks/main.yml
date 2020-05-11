@@ -1,0 +1,16 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Import package Centos
+      shell: |
+        sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-1.noarch.rpm
+        sudo rpm -Uvh mysql80-community-release-el7-1.noarch.rpm
+      when: ansible_os_family == "RedHat"
+    - name: Install Mysql Centos
+      yum: name=mysql-server state=latest
+      when: ansible_os_family == "RedHat"
+    - name: Install Mysql Ubuntu
+      apt: 
+        name=mysql-server state=latest
+        name=python-mysqldb state=latest
+      when: ansible_os_family == "Debian"

@@ -1,0 +1,8 @@
+---
+- name: Create folder
+  file:
+    path: "{{ backup_folder_src }}"
+    owner: root
+    group: root
+    mode: '0775'
+    state: directory

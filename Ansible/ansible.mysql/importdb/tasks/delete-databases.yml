@@ -1,0 +1,10 @@
+---
+    - name: Drop databases old
+      mysql_db:
+        state: absent
+        name: "{{ item }}"
+        login_host: "{{ host }}"
+        login_user: "{{ user }}"
+        login_password: "{{ passwd }}"
+        login_port: '{{ port_db | default("3306") }}'
+      with_items: "{{ include_db }}"

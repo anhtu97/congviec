@@ -1,0 +1,22 @@
+---
+- name: Setup Monitoring Services
+  hosts: localhost
+  roles: 
+  - name: Move Database PostgreSQL
+    role: movedb
+    folder_src: "/home/backup-PostgreSQL/"
+    host_src: 192.168.20.10
+    user_src: postgres
+    passwd_src: postgres
+    port_src: 5432
+    include_database:
+        - partner
+    folder_dest: "/home/backup-PostgreSQL-old/"
+    host_dest: 192.168.10.10
+    user_dest: postgres
+    passwd_dest: postgres
+    port_dest: 6432
+    
+    
+    
+    

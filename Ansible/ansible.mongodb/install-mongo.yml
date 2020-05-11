@@ -1,0 +1,5 @@
+---
+- name: Install MongoDB
+  hosts: localhost
+  roles:
+    - install-mongo

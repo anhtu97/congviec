@@ -1,0 +1,6 @@
+---
+backup_folder_src: "{{ link_folder }}"
+host_db_src: "{{ host }}"
+user_db_src: "{{ user }}"
+passwd_db_src: "{{ passwd }}"
+include_db: "{{ include_database }}"

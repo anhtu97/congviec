@@ -1,0 +1,7 @@
+file_databases_new: "{{ folder_new }}"
+file_databases_old: "{{ folder_old }}"
+host: "{{ host_db }}"
+user:   "{{ user_db }}"
+passwd: "{{ passwd_db }}"
+include: "{{ include_db }}"
+port: '{{ port_db | default("5432") }}'

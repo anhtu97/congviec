@@ -1,0 +1,13 @@
+---
+# Create folder
+- include_tasks: create-folder.yml
+# Dump new databases 
+- include_tasks: dump-databases.yml
+# Backup old databases 
+- include_tasks: backup-databases.yml
+#Delete old databases
+- include_tasks: delete-databases.yml     
+#Create new databases 
+- include_tasks: create-databases.yml
+#Import new databases 
+- include_tasks: import-databases.yml

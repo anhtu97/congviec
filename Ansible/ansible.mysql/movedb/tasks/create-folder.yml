@@ -1,0 +1,15 @@
+---
+    - name: Create folder new
+      file:
+        path: "{{ file_backup_new }}"
+        owner: root
+        group: root
+        mode: '0775'
+        state: directory
+    - name: Create folder old
+      file:
+        path: "{{ file_backup_old }}"
+        owner: root
+        group: root
+        mode: '0775'
+        state: directory

@@ -1,0 +1,19 @@
+---
+- name: Create folder backup_folder_src
+  file:
+    path: "{{ backup_folder_src }}"
+    owner: root
+    group: root
+    mode: '0775'
+    state: directory
+- name: Dump new Database
+  shell: |
+        mongodump --forceTableScan --host {{ host_db_src }} --port {{ port_db_src | default("27017") }} -u {{ user_db_src }} -p {{ passwd_db_src }} -d {{ item }} -o {{ backup_folder_src }}  --authenticationDatabase admin
+  with_items: "{{ include_db }}"
+- name: Drop database old
+  shell: |
+        mongo --host {{ host_db_des }}:{{ port_db_des | default("27017") }} -u {{ user_db_des }} -p {{ passwd_db_des }}  --authenticationDatabase admin --eval "db.dropDatabase()"
+- name: Import database
+  shell: |
+        mongorestore -h {{ host_db_des }}:{{ port_db_des | default("27017") }} -u {{ user_db_des }} -p {{ passwd_db_des }} -d {{item}} {{ backup_folder_src }}{{item}} --authenticationDatabase admin
+  with_items: "{{ include_db }}"    

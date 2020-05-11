@@ -1,0 +1,8 @@
+---
+- name: Drop database old
+  shell: |
+        mongo --host {{ host_db }}:{{ port_db | default("27017") }} -u {{ user_db }} -p {{ passwd_db }}  --authenticationDatabase admin --eval "db.dropDatabase()"
+- name: Import DB Mongo
+  shell: |
+    mongorestore -h {{host_db}}:{{ port_db | default("27017") }} -u {{ user_db }} -p {{ passwd_db }} -d {{item}} {{ folder_backup }}{{item}} --authenticationDatabase admin
+  with_items: "{{ include_db }}"

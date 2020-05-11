@@ -1,0 +1,5 @@
+---
+- name: Backup DB Mongo
+  shell: |
+        mongodump --forceTableScan --host {{ host_db_src }} --port {{ port_db_src | default("27017") }} -u {{ user_db_src }} -p {{ passwd_db_src }} -d {{ item }} -o {{ backup_folder_src }}
+  with_items: "{{ include_db }}"

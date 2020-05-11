@@ -1,0 +1,6 @@
+---
+- name: Tar file backup
+  shell: |
+        cd {{ file_backup }}
+        tar -cvf backupMysql-{{ lookup('pipe','date +%Y%m%d')}}.tar *{{ lookup('pipe','date +%Y:%m:%d') }}.sql
+        rm -rf *{{ lookup('pipe','date +%Y:%m:%d') }}.sql

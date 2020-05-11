@@ -1,0 +1,11 @@
+---
+    - name: Start mysql-server Centos
+      systemd:
+         state: started
+         name: mysqld
+      when: ansible_os_family == "RedHat"
+    - name: Start mysql-server Ubuntu
+      systemd:
+         state: started
+         name: mysql
+      when: ansible_os_family == "Debian"

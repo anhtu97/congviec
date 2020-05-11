@@ -1,0 +1,5 @@
+---
+# Create folder
+- include_tasks: create-folder.yml
+# Dump databases
+- include_tasks: backupdb.yml

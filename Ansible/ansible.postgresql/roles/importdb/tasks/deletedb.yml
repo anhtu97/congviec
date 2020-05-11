@@ -1,0 +1,10 @@
+---
+    - name: Drop databases name
+      postgresql_db:
+        name: "{{ item }}"
+        state: absent 
+        login_host: "{{ host }}"
+        login_user: "{{ user }}"
+        login_password: "{{ passwd }}"
+        port: '{{ port | default("5432") }}'
+      with_items: "{{ include }}"  

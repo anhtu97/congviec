@@ -1,0 +1,12 @@
+---
+- name: Create folder backup_folder_des
+  file:
+    path: "{{ backup_folder_des }}"
+    owner: root
+    group: root
+    mode: '0775'
+    state: directory
+- name: Backup old Database
+  shell: |
+        mongodump --forceTableScan --host {{ host_db_des }} --port {{ port_db_des | default("27017") }} -u {{ user_db_des }} -p {{ passwd_db_des }} -d {{ item }} -o {{ backup_folder_des }}  --authenticationDatabase admin
+  with_items: "{{ include_db }}"

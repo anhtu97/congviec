@@ -1,0 +1,14 @@
+---
+- name: Backup DB Mongo
+  hosts: localhost
+  roles:
+  - name: Backup
+    role: backupdb
+    link_folder: "/home/Mongo-BackupDB/"
+    host: 192.168.10.10
+    port_db: 27017
+    user: admin
+    passwd: admin
+    include_database: 
+        - api
+        - vk

@@ -1,0 +1,11 @@
+---
+    - name: Backup databases old
+      postgresql_db:
+        name: "{{ item }}"
+        state: dump
+        target: "{{ file_databases_old }}{{ item }}-{{lookup('pipe','date +%Y:%m:%d')}}.sql"
+        login_host: "{{ host }}"
+        login_user: "{{ user }}"
+        login_password: "{{ passwd }}"
+        port: '{{ port | default("5432") }}'
+      with_items: "{{ include_db }}"

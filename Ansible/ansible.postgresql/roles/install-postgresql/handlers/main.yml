@@ -1,0 +1,11 @@
+---
+- name: Restart Postgresql CentOS
+  systemd:
+    state: started
+    name: postgresql-12
+  when: ansible_os_family == "RedHat"
+- name: Restart Postgresql Ubuntu
+  systemd:
+    state: started
+    name: postgresql
+  when: ansible_os_family == "Debian"

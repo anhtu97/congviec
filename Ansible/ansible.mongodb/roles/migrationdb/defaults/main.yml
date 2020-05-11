@@ -1,0 +1,11 @@
+host_db_des: "{{ host_des }}"
+user_db_des: "{{ user_des }}"
+passwd_db_des: "{{ passwd_des }}"
+backup_folder_des: "{{ link_folder_des }}"
+include_db: "{{ include_database }}"
+
+host_db_src: "{{ host_src }}"
+user_db_src: "{{ user_src }}"
+passwd_db_src: "{{ passwd_src }}"
+backup_folder_src: "{{ link_folder_src }}"
+include_db: "{{ include_database }}"

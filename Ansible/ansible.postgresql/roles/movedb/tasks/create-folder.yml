@@ -1,0 +1,14 @@
+---
+    - name: Create file
+      file:
+        path: "{{ file_databases_new }}"
+        owner: root
+        group: root
+        mode: '0775'
+        state: directory
+      file:
+        path: "{{ file_databases_old }}"
+        owner: root
+        group: root
+        mode: '0775'
+        state: directory
