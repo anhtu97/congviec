@@ -1,0 +1,11 @@
+---
+    - name: Dump new databases 
+      postgresql_db:
+        name: "{{ item }}"
+        state: dump
+        target: "{{ folder_databases_new }}{{ item }}-{{lookup('pipe','date +%Y%m%d')}}.sql"
+        login_host: "{{ host_dump }}"
+        login_user: "{{ user_dump }}"
+        login_password: "{{ passwd_dump }}"
+        login_port: '{{ port_src | default("5432") }}'
+      with_items: "{{ include_db }}"

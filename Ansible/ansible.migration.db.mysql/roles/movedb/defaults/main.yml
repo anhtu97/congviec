@@ -1,0 +1,12 @@
+folder_databases_new: "{{ folder_src }}"
+host_dump: "{{ host_src }}"
+user_dump: "{{ user_src }}"
+passwd_dump: "{{ pass_src }}"
+include_db: "{{ include_db_need_dump }}"
+port_src: "3306"
+
+folder_databases_old: "{{ folder_dest }}"
+host_old: "{{ host_dest }}"
+user_old: "{{ user_dest }}"
+passwd_old: "{{ pass_dest }}"
+port_src: "3306"

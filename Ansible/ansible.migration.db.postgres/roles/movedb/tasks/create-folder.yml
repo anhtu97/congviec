@@ -1,0 +1,15 @@
+---
+    - name: Create folder src
+      file:
+        path: "{{ folder_databases_new }}"
+        owner: root
+        group: root
+        mode: '0775'
+        state: directory
+    - name: Create folder dest
+      file:
+        path: "{{ folder_databases_old }}"
+        owner: root
+        group: root
+        mode: '0775'
+        state: directory

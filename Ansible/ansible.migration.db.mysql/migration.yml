@@ -1,0 +1,18 @@
+---
+- name: Setup Monitoring Services
+  hosts: localhost
+  roles: 
+  - name: Dump Database Mysql
+    role: movedb
+    folder_src: "/home/backup-Mysql/"
+    host_src: "abcdwf.rds.amazonaws.com"
+    user_src: admin
+    pass_src: admin
+    port_src: 3306
+    include_db_need_dump:
+        - hyt
+    folder_dest: "/home/backup-Mysql-old/"
+    host_dest: 192.168.40.45
+    user_dest: root
+    pass_dest: 1234@
+    port_dest: 3306
