@@ -1,0 +1,13 @@
+---
+- name: Create User ReadOnly PostgreSQL
+  shell: |
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} -c "CREATE USER {{ user_create }} WITH ENCRYPTED PASSWORD '{{ pass_create }}';"
+- name: Grant Permission
+  shell: |
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} {{ item }} -c "GRANT CONNECT ON DATABASE  {{ item }} TO {{ user_create }};"
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} {{ item }} -c "GRANT SELECT ON ALL TABLES IN SCHEMA public TO {{ user_create }};"
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} {{ item }} -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {{ user_create }};"
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} {{ item }} -c "GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO {{ user_create }};"
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} {{ item }} -c "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO {{ user_create }};"
+    PGPASSWORD={{ pass }} psql -h {{ host }} -U {{ user }} {{ item }} -c "REVOKE CREATE ON SCHEMA public FROM PUBLIC;"
+  with_items: "{{ db_name }}"

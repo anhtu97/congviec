@@ -1,0 +1,6 @@
+user: "{{ user_db }}"
+pass: "{{ pass_db }}"
+host: "{{ host_db }}"
+user_create: "{{ user_need_create }}"
+pass_create: "{{ pass_need_create }}"
+db_name: "{{database_name}}"

@@ -1,0 +1,11 @@
+---
+- name: Create user Mysql Access
+  hosts: localhost
+  roles:
+  - name: Access user Mysql
+    role: access
+    host_db: 192.168.40.45
+    user_db: root
+    pass_db: 1234@T
+    user_need_create: user_access
+    pass_need_create: 1234@T

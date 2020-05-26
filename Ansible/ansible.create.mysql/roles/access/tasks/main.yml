@@ -1,0 +1,7 @@
+---
+  - name: Create User
+    command: mysql -h{{ host }} -u{{ user }} -p{{ pass }} -e "CREATE USER '{{  user_create }}'@'%' IDENTIFIED BY '{{ pass_create }}';"
+  - name: Grant Permission
+    command: mysql -h{{ host }} -u{{ user }} -p{{ pass }} -e "GRANT SELECT, INSERT, UPDATE, DELETE ON *.* TO '{{  user_create }}'@'%';"
+  - name: Save 
+    command: mysql -h{{ host }} -u{{ user }} -p{{ pass }} -e "FLUSH PRIVILEGES;"
