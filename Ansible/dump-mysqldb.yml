@@ -1,0 +1,33 @@
+---
+- hosts: localhost
+  vars:
+      exclude_db:
+          - Database
+          - information_schema
+          - performance_schema
+      user_src: bin
+      pass_src: 1234
+      db_host_src: 192.168.40.39
+  tasks:
+    - name: List all databases from source database
+      shell: 'mysql -u {{ user_src }} -p{{ pass_src }} -h{{ db_host_src }} --port={{ port | default("3306") }} -e "show databases;" '
+      register: dblistsrc
+
+    - name: output datbase list
+      debug:
+        msg: '{{ dblistsrc }}'
+
+    - name: "get database name through dblistsrc"
+      debug:
+        msg: "{{ item }}"
+      with_items: "{{ dblistsrc.stdout_lines | difference(exclude_db) }}"
+    - name: Dump all databases from source database
+      mysql_db:
+        state: dump
+        name: "{{ item }}"
+        target: "{{ item }}-{{lookup('pipe','date +%Y%m%d')}}.sql"
+        login_user: '{{ user_src }}'
+        login_password: "{{ pass_src }}"
+        login_port: '{{ port | default("3306") }}'
+        login_host: '{{ db_host_src }}'
+      with_items: "{{ dblistsrc.stdout_lines | difference(exclude_db) }}"
