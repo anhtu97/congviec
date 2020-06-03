@@ -1,0 +1,5 @@
+---
+mail_user: '{{ gmail_user }}'
+mail_passwd: '{{ gmail_passwd }}'
+user_login: '{{ user_login_graylog }}'
+password_login: '{{ password_login_graylog_sha256sum }}'

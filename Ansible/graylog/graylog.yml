@@ -1,0 +1,13 @@
+---
+- name: Install Graylog
+  hosts: group1
+  roles:
+  - name: Graylog
+    role: graylog
+    gmail_user: abc.xyz@gmail.com
+    gmail_passwd: 1234ABCD
+    user_login_graylog: admin
+    password_login_graylog_sha256sum: 5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+
+
+#   example "password_login_graylog_sha256sum":  echo -n password | sha256sum

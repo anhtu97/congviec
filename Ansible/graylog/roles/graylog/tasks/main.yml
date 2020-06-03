@@ -1,0 +1,82 @@
+---
+- name: get default ip
+  debug:
+    var: ansible_default_ipv4.address
+- name: Install epel-release
+  yum:
+    name: epel-release
+    state: present
+- name: Install pwgen
+  yum:
+    name: pwgen
+    state: present
+- name: Install java-1.8.0
+  yum:
+    name: java-1.8.0-openjdk-headless.x86_64
+    state: present  
+- name: Copy elasticsearch.repo.j2 file
+  template:
+    src: elasticsearch.repo.j2
+    dest: /etc/yum.repos.d/elasticsearch.repo
+- name: Copy mongodb-org.repo.j2 file
+  template:
+    src: mongodb-org.repo.j2
+    dest: /etc/yum.repos.d/mongodb-org.repo
+- name: Add rpm
+  yum: 
+    name=https://artifacts.elastic.co/GPG-KEY-elasticsearch state=present
+    name=https://packages.graylog2.org/repo/packages/graylog-3.2-repository_latest.rpm state=present
+- name: Install mongodb
+  yum:
+    name: mongodb-org
+    state: present
+- name: Install elasticsearch-oss
+  yum:
+    name: elasticsearch-oss
+    state: present
+- name: Install graylog-server
+  yum:
+    name: graylog-server
+    state: present
+- name: Generate password_secret
+  shell: "pwgen -N 1 -s 96"
+  register: password_secret
+- name: Copy elasticsearch.yml.j2 file
+  template:
+    src: elasticsearch.yml.j2
+    dest: /etc/elasticsearch/elasticsearch.yml
+- name: Copy server.conf.j2 file
+  template:
+    src: server.conf.j2
+    dest: /etc/graylog/server/server.conf
+- name: Start Graylog-server
+  systemd:
+    name: graylog-server
+    state: started
+    daemon_reload: yes
+    enabled: yes
+- name: Start elasticsearch.service
+  systemd:
+    name: elasticsearch.service
+    state: started
+    daemon_reload: yes
+    enabled: yes
+- name: Start mongod.service
+  systemd:
+    name: mongod.service
+    state: started
+    daemon_reload: yes
+    enabled: yes
+- name: open port
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+     - 9000/tcp
+     - 9200/tcp
+     - 5044/tcp
+- name: reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
