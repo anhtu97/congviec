@@ -1,0 +1,37 @@
+---
+- name: Disable SELinux
+  shell: |
+    sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+- name: Copy grafana.repo.j2 file
+  template:
+    src: grafana.repo.j2
+    dest: /etc/yum.repos.d/grafana.repo.repo
+- name: Install packet
+  yum: name="{{ item }}" state=present
+  with_items: 
+    - grafana
+    - fontconfig
+    - freetype*
+    - urw-fonts
+- name: Start grafana
+  systemd:
+    name: grafana-server
+    state: started
+    daemon_reload: yes
+    enabled: yes
+- name: open port
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+     - 3000/tcp
+- name: reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+- name: Restart server
+  command: /sbin/shutdown -r +1
+  async: 0
+  poll: 0
+  ignore_errors: true
