@@ -1,0 +1,57 @@
+version: "3.2"
+services:
+    mongo:
+        image: mongo:3
+        restart: always
+        networks:
+            - graylog
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.8.10
+        restart: always
+        environment: 
+            - http.host=0.0.0.0
+            - transport.host=localhost
+            - network.host=0.0.0.0
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ports: 
+            - 9200:9200
+            - 9200:9200/udp
+        networks:
+            - graylog
+    graylog:
+        image: graylog/graylog:3.3.3-1
+        restart: always
+        environment: 
+            # pwgen -N 1 -s 96
+            - GRAYLOG_PASSWORD_SECRET=BDWHQDZ1Ie5v8eerf4l7StqJIwvh89jPeXDZbqzp4hJLoxsFUyd0ovEyHFVveGijwoTAuk5qNdUa7xvZnrmhiQ8yjDh9Pdly
+            # echo -n password | sha256sum
+            - GRAYLOG_ROOT_PASSWORD_SHA2=b80b80d9ce0b8a04520db09dc486e7364103cc6c6281fba836e2c6e3a2edb9b3
+            - GRAYLOG_HTTP_EXTERNAL_URI=http://192.168.40.69:9000/
+            - GRAYLOG_TRANSPORT_EMAIL_ENABLED=true
+            - GRAYLOG_TRANSPORT_EMAIL_HOSTNAME=smtp.gmail.com
+            - GRAYLOG_TRANSPORT_EMAIL_PORT=587
+            - GRAYLOG_TRANSPORT_EMAIL_USE_AUTH=true
+            - GRAYLOG_TRANSPORT_EMAIL_USE_TLS=true
+            - GRAYLOG_TRANSPORT_EMAIL_AUTH_USERNAME=aaaaa@gmail.com
+            - GRAYLOG_TRANSPORT_EMAIL_AUTH_PASSWORD=aaaaa
+            - GRAYLOG_TRANSPORT_EMAIL_SUBJECT_PREFIX=[graylog]
+            - GRAYLOG_TRANSPORT_EMAIL_FROM_EMAIL=aaaaa@gmail.com
+        networks:
+            - graylog
+        ports: 
+            - 9000:9000
+            - 1514:1514
+            - 1514:1514/udp
+            - 12201:12201
+            - 12201:12201/udp
+            - 5044:5044
+            - 5044:5044/udp
+            - 25:25
+            - 465:465
+            - 587:587
+        depends_on: 
+            - mongo
+            - elasticsearch
+networks:
+   graylog:
+      driver: bridge
