@@ -9,7 +9,11 @@ services:
             - mysql:db
         env_file:
             - ./glpi.env
+        volumes:
+            - ../GLPI-Website:/var/www/html/glpi
     mysql:
         image: mariadb
         env_file:
             - ./glpi.env
+        volumes:
+            - ./mysql_data:/var/lib/mysql
