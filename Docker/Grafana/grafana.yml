@@ -1,0 +1,21 @@
+version: '3.2'
+services:
+    grafana:
+        image:  grafana/grafana:latest
+        restart: always
+        networks:
+          - grafana
+        environment:
+          - GF_SECURITY_ADMIN_PASSWORD=superpassword
+          - GF_USERS_ALLOW_SIGN_UP=false
+          - GF_SMTP_ENABLED=true
+          - GF_SMTP_HOST=smtp.gmail.com:587
+          - GF_SMTP_USER=aaaaa@gmail.com
+          - GF_SMTP_PASSWORD=password
+          - GF_SMTP_FROM_ADDRESS=aaaaa@gmail.com
+          - GF_SMTP_FROM_NAME=Grafana Alert
+        ports:
+          - 3000:3000
+networks:
+   grafana:
+      driver: bridge
