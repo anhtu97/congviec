@@ -66,5 +66,3 @@
     state: started
     daemon_reload: yes
     enabled: yes
-- name: reboot
-  shell: "reboot"
