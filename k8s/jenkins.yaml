@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jenkins-deployment
+spec:
+  selector:
+    matchLabels:
+      app: "jenkins"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "jenkins"
+    spec:
+      nodeName: master-node
+      containers:
+      - env:
+        - name: JENKINS_HOST_HOME
+          value: /data/jenkins
+        image: jenkinsci/blueocean:latest
+        volumeMounts:
+        - name: jenkins-storage
+          mountPath: /var/jenkins_home
+        - name: docker-storage
+          mountPath: /var/run/docker.sock
+        imagePullPolicy: Always
+        name: "jenkins"
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumes:
+      - name: jenkins-storage
+        hostPath:
+          path: /data/jenkins
+      - name: docker-storage
+        hostPath:
+          path: /var/run/docker.sock
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  labels:
+    app: servicelabel
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+  selector:
+    app: "jenkins"
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: jenkins-ingress
+  namespace: default
+spec:
+  rules:
+  - host: jenkins.ok.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: jenkins-service
+          servicePort: 8080
