@@ -19,3 +19,4 @@ echo '<VirtualHost *:80>
 </VirtualHost>' > /etc/httpd/conf.d/glpi.conf
 
 rm -rf /run/httpd/* /tmp/httpd*
+exec /usr/sbin/apachectl -DFOREGROUND
