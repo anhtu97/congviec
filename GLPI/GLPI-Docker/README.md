@@ -25,7 +25,7 @@ docker-compose up -d
 
 ## Dependency
 
-GLPI Source code: http://gitlab.tpssoft.com.vn/BU3_Products/GLPI-Website
+GLPI Source code: https://github.com/glpi-project/glpi/releases
 Foler same level with GLPI-Docker
 
 ```
