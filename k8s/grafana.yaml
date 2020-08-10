@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-deployment
+spec:
+  selector:
+    matchLabels:
+      app: "grafana"
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: "grafana"
+    spec:
+      containers:
+      - env:
+        - name: GF_SECURITY_ADMIN_PASSWORD
+          value: 1234         #pass login
+        - name: GF_USERS_ALLOW_SIGN_UP
+          value: "false"
+        - name: GF_SMTP_ENABLED
+          value: "true"
+        - name: GF_SMTP_HOST
+          value: smtp.gmail.com:587
+        - name: GF_SMTP_USER
+          value: aaaaaa@gmail.com  # user email
+        - name: GF_SMTP_PASSWORD
+          value: 12345         # password email
+        - name: GF_SMTP_FROM_ADDRESS
+          value: aaaaaaaa@gmail.com     # user email
+        - name: GF_SMTP_FROM_NAME
+          value: Grafana Alert
+        image: grafana/grafana
+        imagePullPolicy: Always
+        name: "grafana"
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-service
+  labels:
+    app: servicelabel
+spec:
+  type: NodePort
+  ports:
+    - port: 3000
+  selector:
+    app: "grafana"
+
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-ingress
+  namespace: default
+spec:
+  rules:
+  - host: grafana.ok.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: grafana-service
+          servicePort: 3000
