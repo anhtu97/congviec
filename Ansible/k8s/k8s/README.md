@@ -1,11 +1,9 @@
 After running ansible-playbook
 
-####################### On node master #######################
 Step 1: Create Cluster with kubeadm
 
 kubeadm init
-kubeadm init --apiserver-advertise-address=10.0.15.10 --pod-network-cidr=10.244.0.0/16
---apiserver-advertise-address = ip master node
+kubeadm init --apiserver-advertise-address={ip master-node} --pod-network-cidr=10.244.0.0/16
 --pod-network-cidr = specify the range of IP addresses for the pod network. We're using the 'flannel' virtual network. If you want to use another pod network such as weave-net or calico, change the range IP address.
 
 Step 2: Manage Cluster as Regular User
@@ -22,8 +20,6 @@ Step 4: Check Status of Cluster
 
 sudo kubectl get nodes
 sudo kubectl get pods --all-namespaces
-
-####################### On node client #######################
 
 Step 5: Join Worker Node to Cluster
 

@@ -1,0 +1,9 @@
+---
+- name: Start kubelet
+  service: 
+    name: kubelet 
+    state: started
+- name: Start docker.service
+  service: 
+    name: docker.service
+    state: started

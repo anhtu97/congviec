@@ -1,0 +1,70 @@
+---
+- name: get default ip
+  debug:
+    var: ansible_default_ipv4.address
+- name: Install epel-release
+  yum:
+    name: epel-release
+    state: present
+- name: Copy kubernetes.repo.j2 file
+  template:
+    src: kubernetes.repo.j2
+    dest: /etc/yum.repos.d/kubernetes.repo
+- name: Install kubelet  
+  yum:
+    name: kubelet
+    state: latest
+- name: Install kubeadm
+  yum:
+    name: kubeadm
+    state: latest
+- name: Install kubectl
+  yum:
+    name: kubectl
+    state: latest
+- name: Start kubelet.service
+  systemd:
+    name: kubelet
+    state: started
+    daemon_reload: yes
+    enabled: yes
+- name: open port
+  firewalld:
+    port: "{{ item }}"
+    permanent: yes
+    state: enabled
+  with_items:
+     - 6443/tcp
+     - 2379/tcp
+     - 2380/tcp
+     - 10250/tcp
+     - 10251/tcp
+     - 10252/tcp
+     - 10255/tcp
+- name: reload service firewalld
+  systemd:
+    name: firewalld
+    state: reloaded
+- name: Copy k8s.conf.j2 file
+  template:
+    src: k8s.conf.j2
+    dest: /etc/sysctl.d/k8s.conf
+- name:  disable SELinux
+  shell: |
+    setenforce 0
+    sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
+    sed -i '/swap/d' /etc/fstab
+    swapoff -a
+- name: install docker-ce
+  shell: |
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    yum install -y docker-ce
+- name: Start docker.service
+  systemd:
+    name: docker.service
+    state: started
+    daemon_reload: yes
+    enabled: yes
+- name: reboot
+  shell: "reboot"
