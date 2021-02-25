@@ -1,0 +1,60 @@
+pipeline {
+    agent { label 'deploy' }
+
+    stages {
+        
+        stage('Delete workspace before build starts') {
+            steps {
+                deleteDir()
+            }
+        }
+        
+        stage('Set build name') {
+            steps {
+                script {
+                    currentBuild.displayName = "${buildNumber}"
+                    currentBuild.description = "${projectName}"
+                }
+            }
+        }
+
+	    stage('Deploy Maven') {
+            steps {
+                sh label: '', script: '''#!/bin/bash
+                set -x
+                set -e
+                set -o pipefail
+                
+                cat_service() 
+                {
+                    docker service ls > list.txt
+                    cat list.txt
+                }
+                cat_service
+
+                if grep -cFq "code_maven" list.txt
+                then   
+                    docker service rm code_maven
+                else
+                    echo 'code_maven not found!!!'
+                fi
+                docker stack deploy --compose-file /root/deploy-code/maven.yaml code --with-registry-auth
+                rm -rf list.txt
+                '''
+            }
+        }
+    }
+    
+    post {
+        success {
+            echo 'OK'
+        }
+        // failure {
+        //     emailext attachLog: false,
+        //     body: 'Deploy maven - ${BUILD_STATUS}. Kindly check console output at ${BUILD_URL} console to view the results', 
+        //     subject: 'Deploy - Build # ${BUILD_NUMBER} - ${BUILD_STATUS}', 
+        //     to: 'xxxxx@gmail.com'
+        // }
+    }
+}
+

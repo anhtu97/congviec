@@ -1,0 +1,75 @@
+pipeline {
+    
+    agent { label 'java' }
+
+    options {
+        timeout(time: 100, unit: 'MINUTES')
+        timestamps()
+    }
+    
+    stages {
+        
+        stage('Delete workspace before build starts') {
+            steps {
+                deleteDir()
+            }
+        }
+        
+        stage('Set build name') {
+            steps {
+                script {
+                    currentBuild.displayName = "${userName}#${BUILD_NUMBER}"
+                    currentBuild.description = "Branch: ${gitBranch}"
+                }
+            }
+        }
+        
+        
+        stage('Build Maven') {
+            steps {
+                // git branch: '${gitBranch}', credentialsId: 'Gitlab', url: 'https://gitlab.com/anhtutmt2/maven-cicd.git'
+                git branch: '${gitBranch}', url: 'https://gitlab.com/anhtutmt2/maven-cicd.git'
+                sh label: '', script: '''#!/bin/bash
+                set -e
+                set -o pipefail
+                set -x
+                /opt/maven/bin/mvn -v
+                /opt/maven/bin/mvn clean install'''
+            }
+        }
+
+        stage('Build Docker') {
+            steps {
+                // git branch: '${gitBranch}', credentialsId: 'Gitlab', url: 'https://gitlab.com/anhtutmt2/maven-cicd.git'
+                sh label: '', script: '''#!/bin/bash
+                set -e
+                set -o pipefail
+                set -x
+                docker login registry.vailua.xyz -u ${userDocker} -p ${passDocker}
+                docker build -f Dockerfile --no-cache -t maven .
+                docker tag maven:latest registry.vailua.xyz/maven:dev-latest
+                docker push registry.vailua.xyz/maven:dev-latest
+                docker rmi registry.vailua.xyz/maven:dev-latest
+                docker rmi maven:latest'''
+            }
+        }
+    }
+    post {
+        always { 
+            cleanWs()
+        }
+        success {
+            echo "OK"
+            sh label: '', script: '''#!/bin/bash
+                adminToken=admin:11ed07af8226b1008b3e2aa9ab9
+                jenkinsUrl=https://$adminToken@url.jenkins.xyz/
+                token="TOKEN"
+                jobToTrigger=Deploy-Maven
+                projectName=Maven
+                URL="${jenkinsUrl}/job/${jobToTrigger}/buildWithParameters?token=${token}&parent_project=${JOB_NAME}&buildNumber=${BUILD_NUMBER}&projectName=${projectName}"
+                URL=${URL// /%20}
+                echo "URL: ${URL}"
+                curl --data-urlencode -s -u $adminToken ${URL}'''
+        }
+    }
+}
