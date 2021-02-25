@@ -47,9 +47,9 @@ pipeline {
                 set -x
                 docker login registry.vailua.xyz -u ${userDocker} -p ${passDocker}
                 docker build -f Dockerfile --no-cache -t maven .
-                docker tag maven:latest registry.vailua.xyz/maven:dev-latest
-                docker push registry.vailua.xyz/maven:dev-latest
-                docker rmi registry.vailua.xyz/maven:dev-latest
+                docker tag maven:latest registry.xxx.xyz/maven:dev-latest
+                docker push registry.xxx.xyz/maven:dev-latest
+                docker rmi registry.xxx.xyz/maven:dev-latest
                 docker rmi maven:latest'''
             }
         }
